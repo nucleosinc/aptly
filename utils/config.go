@@ -68,6 +68,7 @@ type SwiftPublishRoot struct {
 	TenantDomainID string `json:"tenantdomainid"`
 	Prefix         string `json:"prefix"`
 	Container      string `json:"container"`
+	Region         string `json:"region"`
 }
 
 // Config is configuration for aptly, shared by all modules

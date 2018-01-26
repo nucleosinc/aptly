@@ -32,7 +32,7 @@ var (
 
 // NewPublishedStorage creates new instance of PublishedStorage with specified Swift access
 // keys, tenant and tenantId
-func NewPublishedStorage(username string, password string, authURL string, tenant string, tenantID string, domain string, domainID string, tenantDomain string, tenantDomainID string, container string, prefix string) (*PublishedStorage, error) {
+func NewPublishedStorage(username string, password string, authURL string, tenant string, tenantID string, domain string, domainID string, tenantDomain string, tenantDomainID string, container string, prefix string, region string) (*PublishedStorage, error) {
 	if username == "" {
 		if username = os.Getenv("OS_USERNAME"); username == "" {
 			username = os.Getenv("ST_USER")
@@ -66,6 +66,11 @@ func NewPublishedStorage(username string, password string, authURL string, tenan
 	if tenantDomainID == "" {
 		tenantDomainID = os.Getenv("OS_PROJECT_DOMAIN_ID")
 	}
+	if region == "" {
+		if envRegion := os.Getenv("OS_REGION_NAME"); envRegion != "" {
+			region = envRegion
+		}
+	}
 
 	ct := &swift.Connection{
 		UserName:       username,
@@ -78,6 +83,7 @@ func NewPublishedStorage(username string, password string, authURL string, tenan
 		DomainId:       domainID,
 		TenantDomain:   tenantDomain,
 		TenantDomainId: tenantDomainID,
+		Region:         region,
 		ConnectTimeout: 60 * time.Second,
 		Timeout:        60 * time.Second,
 	}
